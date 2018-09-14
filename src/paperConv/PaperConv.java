@@ -45,14 +45,12 @@ public class PaperConv {
 	private static ArrayList<String> removeEnter(ArrayList<String> hoge){
 		//unix: "\n" to " "
 		for(int i=0;i<hoge.size();i++){
-			if(hoge.get(i).equals("\n")) {					
-				hoge.set(i," ");
-			}
+			if(hoge.get(i).equals("\n")) hoge.set(i," ");
 		}
 		//win: "\r\n" to " "
 		//			for(int i=0;i<hoge.size();i++){
 		//				if(hoge.get(i).equals("\r")) {
-		//					if(hoge.get(i+1).equals("\n")) {					
+		//					if(hoge.get(i+1).equals("\n")) {
 		//						hoge.set(i," ");
 		//						hoge.remove(i+1);
 		//					}
