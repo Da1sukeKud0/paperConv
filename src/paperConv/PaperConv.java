@@ -1,4 +1,5 @@
 package paperConv;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -8,72 +9,85 @@ import java.util.ArrayList;
 public class PaperConv {
 
 	public static void main(String[] args) throws IOException {
-		//Load input file into FileClass
+		if (args.length != 2) {
+			System.out.println("usage: java paperConv/PaperConv input.txt output.txt");
+			System.exit(1);
+		}
+
+		// Load input file into FileClass
 		File file = new File(args[0]);
 
-		if(file.exists()) {
+		if (file.exists()) {
 
-			//Create FileReaderClass object
+			// Create FileReaderClass object
 			FileReader filereader = new FileReader(file);
 
-			//Read file one character at a time with filereader.read()
+			// Read file one character at a time with filereader.read()
 			int data;
 			String moji;
-			ArrayList<String> hoge = new ArrayList<String>();
-			while((data = filereader.read()) != -1) {
-				if((moji = String.valueOf((char)data)) != null)hoge.add(moji);
+			ArrayList<String> strArrList = new ArrayList<String>();
+			while ((data = filereader.read()) != -1) {
+				if ((moji = String.valueOf((char) data)) != null)
+					strArrList.add(moji);
 			}
 
-			removeEnter(hoge);
-			eosToEnter(hoge);
+			removeEnter(strArrList);
+			eosToEnter(strArrList);
 
-			//Create output file
+			// Create output file
 			File newfile = new File(args[1]);
 			FileWriter filewriter = new FileWriter(newfile);
-			for(int i=0;i<hoge.size();i++){
-				filewriter.write(hoge.get(i));
+			for (int i = 0; i < strArrList.size(); i++) {
+				filewriter.write(strArrList.get(i));
 			}
 			filewriter.close();
 			newfile.createNewFile();
 
-			//Close file
+			// Close file
 			filereader.close();
 			System.out.println("process is end");
 		}
 	}
 
-	private static ArrayList<String> removeEnter(ArrayList<String> hoge){
-		//unix: "\n" to " "
-		for(int i=0;i<hoge.size();i++){
-<<<<<<< HEAD
-			if(hoge.get(i).equals("\n")) hoge.set(i," ");
-=======
-			if(hoge.get(i).equals("\n")) {
-				hoge.set(i," ");
+	private static ArrayList<String> removeEnter(ArrayList<String> strArrList) {
+		// unix: "\n" to " "
+		String ostype = System.getProperty("os.name");
+		System.out.println(ostype);
+		switch (ostype) {
+		case "Windows":
+			// windowsの改行コードは\r\n
+			for (int i = 0; i < strArrList.size(); i++) {
+				if (strArrList.get(i).equals("\r")) {
+					if (strArrList.get(i + 1).equals("\n")) {
+						strArrList.set(i, " ");
+						strArrList.remove(i + 1);
+					}
+				}
 			}
->>>>>>> 841fef9b26cbe3a713b343be770287d69c337abd
-		}
-		//win: "\r\n" to " "
-		//			for(int i=0;i<hoge.size();i++){
-		//				if(hoge.get(i).equals("\r")) {
-		//					if(hoge.get(i+1).equals("\n")) {
-		//						hoge.set(i," ");
-		//						hoge.remove(i+1);
-		//					}
-		//				}
-		//			}
-		return hoge;
-	}
-	private static ArrayList<String> eosToEnter(ArrayList<String> hoge){
-		//". "を検知し、改行
-		for(int i=0;i<hoge.size()-1;i++){
-			if(hoge.get(i).equals(".")){ //参照型を==で比較するとアドレスを比べられちゃうのでequals()
-				System.out.println("find dot");
-				if (hoge.get(i+1).equals(" ")){
-					hoge.set(i+1,"\n");System.out.println("kaigyo");i++;
+			break;
+		default:
+			// Unix系の改行コードは\n
+			for (int i = 0; i < strArrList.size(); i++) {
+				if (strArrList.get(i).equals("\n")) {
+					strArrList.set(i, " ");
 				}
 			}
 		}
-		return hoge;
+		return strArrList;
+	}
+
+	private static ArrayList<String> eosToEnter(ArrayList<String> strArrList) {
+		// ". "を検知し、改行
+		for (int i = 0; i < strArrList.size() - 1; i++) {
+			if (strArrList.get(i).equals(".")) { // 参照型を==で比較するとアドレスを比べられちゃうのでequals()
+				System.out.println("find dot");
+				if (strArrList.get(i + 1).equals(" ")) {
+					strArrList.set(i + 1, "\n");
+					System.out.println("kaigyo");
+					i++;
+				}
+			}
+		}
+		return strArrList;
 	}
 }

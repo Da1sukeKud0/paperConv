@@ -1,0 +1,1 @@
+The use case is simple. I got the source files that were created using Eclipse. So, there is a deep directory structure, where any Java class could be referring to another Java class in the same, child, sibling or parent folder. 
